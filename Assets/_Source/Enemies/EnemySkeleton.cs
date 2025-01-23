@@ -1,37 +1,55 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemies
 {
     public class EnemySkeleton : AEnemy
     {
-        public GameObject projectilePrefab;
-        public Transform shootPoint;
+        [SerializeField] private GameObject projectilePrefab;
+        [SerializeField] private Transform shootPoint;
+        [SerializeField] private float attackInterval = 2f;
 
-        private void Start()
+        private float _attackTimer;
+
+        protected override void Start()
         {
-            StartCoroutine(SpamAttack());
+            base.Start();
+            Debug.Log("skeleton started");
+
+            _attackTimer = attackInterval;
         }
 
-        private IEnumerator SpamAttack()
+        private void Update()
         {
-            while (true)
+            Debug.Log("shooting");
+            if (gameObject.activeInHierarchy)
             {
-                Attack();
-                yield return new WaitForSeconds(1f); // Adjust delay as needed
+                _attackTimer -= Time.deltaTime;
+
+                if (_attackTimer <= 0)
+                {
+                    Attack();
+                    _attackTimer = attackInterval;
+                }
             }
         }
 
         public override void Attack()
         {
-            animator.SetTrigger(EnemyAnims.Attack);
-            Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            if (gameObject != null)
+            {
+                Animator.SetTrigger(EnemyAnims.Attack);
+                Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            }
+            else
+            {
+                Debug.Log("save");
+            }
         }
 
         public override void Stop()
         {
             StopAllCoroutines();
-            animator.SetTrigger(EnemyAnims.Idle);
+            Animator.SetFloat(EnemyAnims.Speed, 0f);
         }
     }
 }

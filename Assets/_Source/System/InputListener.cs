@@ -1,6 +1,5 @@
 ﻿using Player;
 using UnityEngine;
-using Zenject;
 
 namespace System
 {
@@ -11,16 +10,10 @@ namespace System
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Q))
-            {
-                Debug.Log("invoked");
-                _attackPerformer.PerformAttack();
-            }
+                // _attackPerformer.PerformAttack();
+                OnAttackCalled?.Invoke();
         }
 
-        [Inject]
-        public void Construct(AttackPerformer attackPerformer)
-        {
-            _attackPerformer = attackPerformer;
-        }
+        public event Action OnAttackCalled;
     }
 }

@@ -21,12 +21,12 @@ namespace Enemies
 
         public override void Attack()
         {
-            animator.SetTrigger(EnemyAnims.Attack);
+            Animator.SetTrigger(EnemyAnims.Attack);
         }
 
         public override void Stop()
         {
-            animator.SetTrigger(EnemyAnims.Idle);
+            Animator.SetFloat(EnemyAnims.Speed, 0f);
         }
     }
 }

@@ -4,11 +4,11 @@ namespace Enemies
 {
     public abstract class AEnemy : MonoBehaviour
     {
-        protected Animator animator;
+        protected Animator Animator;
 
         protected virtual void Start()
         {
-            animator = GetComponent<Animator>();
+            Animator = GetComponent<Animator>();
         }
 
         public abstract void Attack();

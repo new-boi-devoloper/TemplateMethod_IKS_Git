@@ -1,7 +1,6 @@
 using System;
 using Strategies;
 using UI;
-using UnityEngine;
 using Zenject;
 
 namespace Player
@@ -11,19 +10,18 @@ namespace Player
         private readonly ClientUI _clientUI;
         private readonly PlayerBoy _playerBoy;
         private IAttackStrategy _currentAttack;
-        private InputListener _inputListener;
+        private readonly InputListener _inputListener;
 
         [Inject]
-        public AttackPerformer(PlayerBoy playerBoy, ClientUI clientUI)
+        public AttackPerformer(PlayerBoy playerBoy, ClientUI clientUI, InputListener inputListener)
         {
-            Debug.Log("AttackPerformer made");
             _playerBoy = playerBoy;
             _clientUI = clientUI;
+            _inputListener = inputListener;
 
             _clientUI.OnAttackChanged += HandleAttackChanged;
-            Debug.Log("started to listen");
+            _inputListener.OnAttackCalled += PerformAttack;
         }
-
 
         private void HandleAttackChanged(AttackType attackType)
         {
@@ -43,7 +41,7 @@ namespace Player
             PerformAttack();
         }
 
-        public void PerformAttack()
+        private void PerformAttack()
         {
             OnAttackPerformed?.Invoke();
             _currentAttack.PlayAnim(_playerBoy.Animator);
